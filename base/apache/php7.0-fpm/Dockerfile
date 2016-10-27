@@ -9,7 +9,7 @@ RUN /bin/echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu trusty main" >> /e
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C \
  && apt-get update \
  && apt-get install -y libapache2-mod-fastcgi \
- && apt-get install -y php7.0 php7.0-fpm php7.0-mysql php7.0-dom php7.0-mcrypt php7.0-mbstring php7.0-zip php7.0-gd \
+ && apt-get install -y php7.0 php7.0-fpm php7.0-mysql php7.0-dom php7.0-mcrypt php7.0-mbstring php7.0-zip php7.0-gd php7.0-memcached \
  && apt-get install -y php7.0-xdebug \
  && /bin/echo -e "[program:fpm]\ncommand=/usr/sbin/php-fpm7.0 --nodaemonize\n" >> /etc/supervisor/conf.d/supervisord.conf \
  && mkdir -p /run/php \

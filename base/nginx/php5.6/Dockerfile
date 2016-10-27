@@ -8,7 +8,7 @@ RUN /bin/echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu trusty main" >> /e
  && /bin/echo "deb-src http://ppa.launchpad.net/ondrej/php/ubuntu trusty main" >> /etc/apt/sources.list.d/php.list \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C \
  && apt-get update \
- && apt-get install -y php5.6 php5.6-fpm php5.6-mysql php5.6-dom php5.6-mcrypt php5.6-mbstring php5.6-zip php5.6-gd \
+ && apt-get install -y php5.6 php5.6-fpm php5.6-mysql php5.6-dom php5.6-mcrypt php5.6-mbstring php5.6-zip php5.6-gd php5.6-memcached \
  && apt-get install -y php5.6-xdebug \
  && /bin/echo -e "[program:fpm]\ncommand=/usr/sbin/php-fpm5.6 --nodaemonize\n" >> /etc/supervisor/conf.d/supervisord.conf \
  && mkdir -p /run/php \

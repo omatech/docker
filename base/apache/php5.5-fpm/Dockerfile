@@ -9,7 +9,7 @@ RUN /bin/echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu trusty main" >> /e
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C \
  && apt-get update \
  && apt-get install -y libapache2-mod-fastcgi \
- && apt-get install -y php5.5 php5.5-fpm php5.5-mysql php5.5-dom php5.5-mcrypt php5.5-mbstring php5.5-zip php5.5-gd \
+ && apt-get install -y php5.5 php5.5-fpm php5.5-mysql php5.5-dom php5.5-mcrypt php5.5-mbstring php5.5-zip php5.5-gd php5.5-memcached \
  && apt-get install -y php5.5-xdebug \
  && /bin/echo -e "[program:fpm]\ncommand=/usr/sbin/php-fpm5.5 --nodaemonize\n" >> /etc/supervisor/conf.d/supervisord.conf \
  && mkdir -p /run/php \

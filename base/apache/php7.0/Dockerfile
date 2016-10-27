@@ -8,7 +8,7 @@ RUN /bin/echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu trusty main" >> /e
  && /bin/echo "deb-src http://ppa.launchpad.net/ondrej/php/ubuntu trusty main" >> /etc/apt/sources.list.d/php.list \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C \
  && apt-get update \
- && apt-get install -y php7.0 php7.0-mysql php7.0-dom php7.0-mcrypt php7.0-mbstring php7.0-zip php7.0-gd \
+ && apt-get install -y php7.0 php7.0-mysql php7.0-dom php7.0-mcrypt php7.0-mbstring php7.0-zip php7.0-gd php7.0-memcached \
  && apt-get install -y php7.0-xdebug
 
 #Instalación de Composer
