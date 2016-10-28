@@ -19,10 +19,10 @@ RUN apt-get install -y openssh-server \
 EXPOSE 22
 
 #Instalación de Utilidades
-RUN apt-get install -y vim curl wget
+RUN apt-get install -y vim nano curl wget gdebi
 
 #Limpiamos temporales
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 #Comando de arranque
-ENTRYPOINT ["/usr/bin/supervisord"]
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
