@@ -12,7 +12,7 @@ RUN sed -i "s|START=no|START=yes|g" /etc/default/sphinxsearch \
  && /bin/echo -e '*/5 * * * * indexer --all --rotate' >> /etc/cron.d/sphinx-cron \
  && chmod 0644 /etc/cron.d/sphinx-cron \
  && /bin/echo -e "[program:crontab]\ncommand=cron -f\n" >> /etc/supervisor/conf.d/supervisord.conf \
- && /bin/echo -e "#!/bin/bash\n/usr/bin/indexer --rotate --all\n/usr/bin/searchd -c /etc/sphinxsearch/sphinx.conf --nodetach\n" >> /var/startup.sh \
+ && /bin/echo -e "#!/bin/bash\nsleep 3\n/usr/bin/indexer --rotate --all\n/usr/bin/searchd -c /etc/sphinxsearch/sphinx.conf --nodetach\n" >> /var/startup.sh \
  && /bin/echo -e '[program:sphinx]\ncommand=bash /var/startup.sh' >> /etc/supervisor/conf.d/supervisord.conf
 
 #Limpiamos temporales
