@@ -10,7 +10,8 @@ RUN groupadd mysql --gid 500 \
  && /bin/echo mysql-server mysql-server/root_password_again password 'root' | debconf-set-selections \
  && apt-get install -y mysql-server \
  && sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf  \
- && /bin/echo -e "[program:mysql]\ncommand=/usr/bin/mysqld_safe\n" >> /etc/supervisor/conf.d/supervisord.conf
+ && /bin/echo -e "#!/bin/bash\nchown -R mysql:mysql /var/lib/mysql\nchown -R mysql:mysql /var/lib/mysql-files\n/usr/bin/mysqld_safe" >> /var/startup.sh \
+ && /bin/echo -e '[program:mysql]\ncommand=bash /var/startup.sh' >> /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 3306
 
