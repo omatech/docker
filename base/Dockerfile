@@ -19,7 +19,9 @@ RUN apt-get install -y openssh-server \
 EXPOSE 22
 
 #Instalación de Utilidades
-RUN apt-get install -y vim nano curl wget gdebi git
+RUN apt-get install -y vim nano curl wget gdebi git zsh \
+ && wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
+ && chsh -s /bin/zsh
 
 #Limpiamos temporales
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
