@@ -4,7 +4,9 @@ FROM omatech/base
 RUN apt-get update && apt-get upgrade -y
 
 #Instalación de MySQL-5.5
-RUN /bin/echo mysql-server mysql-server/root_password password 'root' | debconf-set-selections \
+RUN groupadd mysql --gid 500 \
+ && useradd mysql --uid 500 --gid 500 --home-dir /var/lib/mysql --shell /bin/false --comment "MySQL Server,,," \
+ && /bin/echo mysql-server mysql-server/root_password password 'root' | debconf-set-selections \
  && /bin/echo mysql-server mysql-server/root_password_again password 'root' | debconf-set-selections \
  && apt-get install -y mysql-server \
  && sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf  \

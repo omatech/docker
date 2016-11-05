@@ -4,7 +4,9 @@ FROM omatech/base
 RUN apt-get update && apt-get upgrade -y
 
 #Instalación de MySQL-5.6
-RUN /bin/echo mysql-community-server mysql-community-server/root-pass password 'root' | debconf-set-selections \
+RUN groupadd mysql --gid 500 \
+ && useradd mysql --uid 500 --gid 500 --home-dir /var/lib/mysql --shell /bin/false --comment "MySQL Server,,," \
+ && /bin/echo mysql-community-server mysql-community-server/root-pass password 'root' | debconf-set-selections \
  && /bin/echo mysql-community-server mysql-community-server/re-root-pass password 'root' | debconf-set-selections \
  && /bin/echo "deb http://repo.mysql.com/apt/ubuntu/ trusty mysql-5.6" >> /etc/apt/sources.list.d/mysql.list \
  && /bin/echo "deb-src http://repo.mysql.com/apt/ubuntu/ trusty mysql-5.6" >> /etc/apt/sources.list.d/mysql.list \
