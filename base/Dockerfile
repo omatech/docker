@@ -23,10 +23,14 @@ RUN /bin/echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu trusty main" >> 
  && /bin/echo "deb-src http://ppa.launchpad.net/git-core/ppa/ubuntu trusty main" >> /etc/apt/sources.list.d/git.list \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E1DD270288B4E6030699E45FA1715D88E1DF1F24 \
  && apt-get update \
- && apt-get install git
+ && apt-get install -y git 
 
 #Instalación de Utilidades
-RUN apt-get install -y vim nano curl wget gdebi
+RUN apt-get install -y vim nano curl wget gdebi zsh
+
+#Instalación de Prezto
+RUN zsh -c 'git clone --recursive https://github.com/garbin/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"; setopt EXTENDED_GLOB;  for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}";  done;  chsh -s /bin/zsh' \
+ && sed -ri "s/'completion'/'completion' 'syntax-highlighting' 'git' 'history-substring-search'/g" /root/.zprezto/runcoms/zpreztorc
 
 #Limpiamos temporales
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
