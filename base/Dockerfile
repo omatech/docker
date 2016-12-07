@@ -18,10 +18,15 @@ RUN apt-get install -y openssh-server \
 
 EXPOSE 22
 
+#Instalación de Git
+RUN /bin/echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu trusty main" >> /etc/apt/sources.list.d/git.list \
+ && /bin/echo "deb-src http://ppa.launchpad.net/git-core/ppa/ubuntu trusty main" >> /etc/apt/sources.list.d/git.list \
+ && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E1DD270288B4E6030699E45FA1715D88E1DF1F24 \
+ && apt-get update \
+ && apt-get install git
+
 #Instalación de Utilidades
-RUN apt-get install -y vim nano curl wget gdebi git zsh \
- && wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
- && chsh -s /bin/zsh
+RUN apt-get install -y vim nano curl wget gdebi
 
 #Limpiamos temporales
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
