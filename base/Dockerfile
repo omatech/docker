@@ -28,9 +28,10 @@ RUN /bin/echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu trusty main" >> 
 #Instalación de Utilidades
 RUN apt-get install -y vim nano curl wget gdebi zsh
 
-#Instalación de Prezto
-RUN zsh -c 'git clone --recursive https://github.com/garbin/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"; setopt EXTENDED_GLOB;  for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}";  done;  chsh -s /bin/zsh' \
- && sed -ri "s/'completion'/'completion' 'syntax-highlighting' 'git' 'history-substring-search'/g" /root/.zprezto/runcoms/zpreztorc
+#Instalación de Oh My Zsh
+RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
+ && sed -i 's/plugins=(git)/plugins=()/g' /root/.zshrc \
+ && chsh -s /bin/zsh
 
 #Limpiamos temporales
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
