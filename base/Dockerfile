@@ -1,7 +1,14 @@
-FROM ubuntu:trusty
+FROM ubuntu:xenial
 
 #Actualizamos el sistema
 RUN apt-get update && apt-get upgrade -y
+
+#tzdata
+RUN ln -fs /usr/share/zoneinfo/Europe/Madrid /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
+
+#Locales
+RUN locale-gen en_US.UTF-8 en_GB.UTF-8 es_ES.UTF-8 ca_ES.UTF-8 \
+ && export LC_ALL="en_US.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US-UTF-8"
 
 #Instalación de Supervisor
 RUN apt-get install -y supervisor \
@@ -19,18 +26,18 @@ RUN apt-get install -y openssh-server \
 EXPOSE 22
 
 #Instalación de Git
-RUN /bin/echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu trusty main" >> /etc/apt/sources.list.d/git.list \
- && /bin/echo "deb-src http://ppa.launchpad.net/git-core/ppa/ubuntu trusty main" >> /etc/apt/sources.list.d/git.list \
+RUN /bin/echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main" >> /etc/apt/sources.list.d/git.list \
+ && /bin/echo "deb-src http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main" >> /etc/apt/sources.list.d/git.list \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E1DD270288B4E6030699E45FA1715D88E1DF1F24 \
  && apt-get update \
- && apt-get install -y git 
+ && apt-get install -y git
 
 #Instalación de Utilidades
-RUN apt-get install -y vim nano curl wget gdebi zsh
+RUN apt-get install -y vim nano curl wget gdebi zsh traceroute zip subversion rsync sendmail-bin sendmail ncftp lynx openssl ca-certificates pdftk imagemagick mailutils htop monit build-essential poppler-utils libimage-exiftool-perl smartmontools iotop software-properties-common
 
 #Instalación de Oh My Zsh
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
- && sed -i 's/plugins=(git)/plugins=()/g' /root/.zshrc \
+ && sed -i 's/# DISABLE_UNTRACKED_FILES_DIRTY="true"/DISABLE_UNTRACKED_FILES_DIRTY="true"/g' /root/.zshrc \
  && chsh -s /bin/zsh
 
 #Limpiamos temporales
