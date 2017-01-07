@@ -8,7 +8,8 @@ RUN ln -fs /usr/share/zoneinfo/Europe/Madrid /etc/localtime && dpkg-reconfigure 
 
 #Locales
 RUN locale-gen en_US.UTF-8 en_GB.UTF-8 es_ES.UTF-8 ca_ES.UTF-8 \
- && export LC_ALL="en_US.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US-UTF-8"
+ && export LC_ALL="en_US.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US-UTF-8" \
+ && /bin/echo -e 'export LC_ALL="en_US.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US-UTF-8"' >> /root/.bashrc
 
 #Instalación de Supervisor
 RUN apt-get install -y supervisor \
@@ -38,6 +39,7 @@ RUN apt-get install -y vim nano curl wget gdebi zsh traceroute zip subversion rs
 #Instalación de Oh My Zsh
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
  && sed -i 's/# DISABLE_UNTRACKED_FILES_DIRTY="true"/DISABLE_UNTRACKED_FILES_DIRTY="true"/g' /root/.zshrc \
+ && sed -i 's/# export LANG=en_US.UTF-8/export LC_ALL="en_US.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US-UTF-8"/g' /root/.zshrc \
  && chsh -s /bin/zsh
 
 #Limpiamos temporales
