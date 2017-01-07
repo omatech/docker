@@ -23,8 +23,14 @@ EXPOSE 443
 
 #NodeJS
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
- && apt-get install -y nodejs \
- && npm install -g bower yarn
+ && apt-get install -y nodejs
+
+#Bower
+RUN  npm install -g bower
+
+#Yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+ && /bin/echo -e "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
 #Limpiamos temporales
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
