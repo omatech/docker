@@ -11,9 +11,17 @@ RUN groupadd mysql --gid 500 \
  && /bin/echo "deb http://repo.mysql.com/apt/ubuntu/ trusty mysql-5.6" >> /etc/apt/sources.list.d/mysql.list \
  && /bin/echo "deb-src http://repo.mysql.com/apt/ubuntu/ trusty mysql-5.6" >> /etc/apt/sources.list.d/mysql.list \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A4A9406876FCBD3C456770C88C718D3B5072E1F5 \
+ && apt-get remove -y mysql-client mysql-server libmysqlclient-dev mysql-common \
+ && /bin/echo 'Package: *' > "/etc/apt/preferences.d/mysql" \
+ && /bin/echo 'Pin: origin "repo.mysql.com"' >> "/etc/apt/preferences.d/mysql" \
+ && /bin/echo 'Pin-Priority: 999' >> "/etc/apt/preferences.d/mysql" \
  && apt-get update \
  && apt-get install -y mysql-community-server \
- && sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf  \
+ && sed -i 's/\/lib\/init\/apparmor-profile-load usr.sbin.mysqld/#\/lib\/init\/apparmor-profile-load usr.sbin.mysqld/' /etc/init.d/mysql \
+ && sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf \
+ && sed -i '/^\(log-error\s.*\)/a slow_query_log  = \/var\/log\/mysql\/mysql-slow.log' /etc/mysql/my.cnf \
+ && sed -i '/^\(slow_query_log\s.*\)/a long_query_time = 2' /etc/mysql/my.cnf \
+ && sed -i '/^\(long_query_time\s.*\)/a ft_min_word_len = 3' /etc/mysql/my.cnf \
  && /bin/echo -e "#!/bin/bash\nchown -R mysql:mysql /var/lib/mysql\nchown -R mysql:mysql /var/lib/mysql-files\n/usr/bin/mysqld_safe" >> /var/startup.sh \
  && /bin/echo -e '[program:mysql]\ncommand=bash /var/startup.sh' >> /etc/supervisor/conf.d/supervisord.conf
 
