@@ -39,12 +39,15 @@ RUN /bin/echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" >> /e
  && sed -i "s/post_max_size = 8M/post_max_size = 50M/" /etc/php/5.6/fpm/php.ini \
  && sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 130M/" /etc/php/5.6/fpm/php.ini \
  && sed -i "s/; max_input_vars = 1000/max_input_vars = 1000/" /etc/php/5.6/fpm/php.ini \
+ && sed -i "s/;pm.status_path = \/status/pm.status_path = \/status/" /etc/php/5.6/fpm/pool.d/www.conf \
+ && sed -i "s/;slowlog = log\/\$pool.log.slow/slowlog = \/var\/log\/\$pool.slow.log/" /etc/php/5.6/fpm/pool.d/www.conf \
+ && sed -i "s/;request_slowlog_timeout = 0/request_slowlog_timeout = 3/" /etc/php/5.6/fpm/pool.d/www.conf \
  && a2enmod fastcgi setenvif \
  && /bin/echo '<IfModule mod_fastcgi.c>' >> /etc/apache2/conf-available/php5.6-fpm.conf \
  && /bin/echo '    AddHandler php5.6-fcgi .php' >> /etc/apache2/conf-available/php5.6-fpm.conf \
  && /bin/echo '    Action php5.6-fcgi /php5.6-fcgi' >> /etc/apache2/conf-available/php5.6-fpm.conf \
  && /bin/echo '    Alias /php5.6-fcgi /usr/lib/cgi-bin/php5.6-fcgi' >> /etc/apache2/conf-available/php5.6-fpm.conf \
- && /bin/echo '    Alias /statusfpm /usr/lib/cgi-bin/php5.6-fcgi' >> /etc/apache2/conf-available/php5.6-fpm.conf \
+ && /bin/echo '    Alias /status /usr/lib/cgi-bin/php5.6-fcgi' >> /etc/apache2/conf-available/php5.6-fpm.conf \
  && /bin/echo '    FastCgiExternalServer /usr/lib/cgi-bin/php5.6-fcgi -idle-timeout 300 -socket /run/php/php5.6-fpm.sock -pass-header Authorization' >> /etc/apache2/conf-available/php5.6-fpm.conf \
  && /bin/echo '    <Directory /usr/lib/cgi-bin>' >> /etc/apache2/conf-available/php5.6-fpm.conf \
  && /bin/echo '        Require all granted' >> /etc/apache2/conf-available/php5.6-fpm.conf \
