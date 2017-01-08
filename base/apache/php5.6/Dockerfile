@@ -8,7 +8,7 @@ RUN /bin/echo "deb http://ppa.launchpad.net/ondrej/apache2/ubuntu xenial main" >
  && /bin/echo "deb-src http://ppa.launchpad.net/ondrej/apache2/ubuntu xenial main" >> /etc/apt/sources.list.d/apache.list \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C \
  && apt-get update \
- && apt-get install -y apache2 \
+ && apt-get install -y apache2 apache2-utils \
  && mkdir -p /var/lock/apache2 /var/run/apache2 \
  && sed -i "s|#AddDefaultCharset UTF-8|AddDefaultCharset UTF-8|g" /etc/apache2/conf-enabled/charset.conf \
  && /bin/echo -e "[program:apache2]\ncommand=/bin/bash -c 'source /etc/apache2/envvars && exec /usr/sbin/apache2 -D FOREGROUND'\n" >> /etc/supervisor/conf.d/supervisord.conf \
@@ -26,7 +26,14 @@ RUN /bin/echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" >> /e
  && /bin/echo "deb-src http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" >> /etc/apt/sources.list.d/php.list \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C \
  && apt-get update \
- && apt-get install -y php5.6 php5.6-mysql php5.6-dom php5.6-mcrypt php5.6-mbstring php5.6-zip php5.6-gd php5.6-memcached php5.6-curl php5.6-dev php5.6-intl
+ && apt-get install -y php5.6 php5.6-mysql php5.6-dom php5.6-mcrypt php5.6-mbstring php5.6-zip php5.6-gd php5.6-memcached php5.6-curl php5.6-dev php5.6-intl \
+ && sed -i "s/short_open_tag = Off/short_open_tag = On/" /etc/php/5.6/apache2/php.ini \
+ && sed -i "s/memory_limit = 128M/memory_limit = 512M/" /etc/php/5.6/apache2/php.ini \
+ && sed -i "s/error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT/error_reporting = E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT/" /etc/php/5.6/apache2/php.ini \
+ && sed -i "s/display_errors = Off/display_errors=On/" /etc/php/5.6/apache2/php.ini \
+ && sed -i "s/post_max_size = 8M/post_max_size = 50M/" /etc/php/5.6/apache2/php.ini \
+ && sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 130M/" /etc/php/5.6/apache2/php.ini \
+ && sed -i "s/; max_input_vars = 1000/max_input_vars = 1000/" /etc/php/5.6/apache2/php.ini
 
 #Xdebug
 RUN apt-get install -y php5.6-xdebug \
