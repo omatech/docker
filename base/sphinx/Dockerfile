@@ -4,8 +4,11 @@ FROM omatech/base
 RUN apt-get update && apt-get upgrade -y
 
 #Instalación de sphinx
-RUN wget -P /tmp http://sphinxsearch.com/files/sphinxsearch_2.2.11-release-1~trusty_amd64.deb \
- && gdebi -n /tmp/sphinxsearch_2.2.11-release-1~trusty_amd64.deb
+RUN /bin/echo "deb http://ppa.launchpad.net/builds/sphinxsearch-rel22/ubuntu xenial main" >> /etc/apt/sources.list.d/apache.list \
+ && /bin/echo "deb-src http://ppa.launchpad.net/builds/sphinxsearch-rel22/ubuntu xenial main" >> /etc/apt/sources.list.d/apache.list \
+ && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 2FE7BA61B28B34B7A2B749A2B9D8946B16932B16 \
+ && apt-get update \
+ && apt-get install -y sphinxsearch
 
 #Configuración de sphinx y cron
 RUN sed -i "s|START=no|START=yes|g" /etc/default/sphinxsearch \
