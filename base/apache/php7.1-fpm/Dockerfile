@@ -29,7 +29,7 @@ RUN bin/echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" >> /et
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C \
  && apt-get update \
  && apt-get install -y libapache2-mod-fastcgi \
- && apt-get install -y php7.1 php7.1-mysql php7.1-dom php7.1-mcrypt php7.1-mbstring php7.1-zip php7.1-gd php7.1-memcached php7.1-curl php7.1-dev php7.1-intl \
+ && apt-get install -y php7.1-fpm php7.1-mysql php7.1-dom php7.1-mcrypt php7.1-mbstring php7.1-zip php7.1-gd php7.1-memcached php7.1-curl php7.1-dev php7.1-intl \
  && /bin/echo -e "[program:fpm]\ncommand=/usr/sbin/php-fpm7.1 --nodaemonize\n" >> /etc/supervisor/conf.d/supervisord.conf \
  && mkdir -p /run/php \
  && sed -i "s/short_open_tag = Off/short_open_tag = On/" /etc/php/7.1/fpm/php.ini \

@@ -22,18 +22,18 @@ EXPOSE 80
 EXPOSE 443
 
 #Instalación de PHP 7.1
-RUN /bin/echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu trusty main" >> /etc/apt/sources.list.d/php.list \
- && /bin/echo "deb-src http://ppa.launchpad.net/ondrej/php/ubuntu trusty main" >> /etc/apt/sources.list.d/php.list \
+RUN /bin/echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" >> /etc/apt/sources.list.d/php.list \
+ && /bin/echo "deb-src http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" >> /etc/apt/sources.list.d/php.list \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C \
  && apt-get update \
  && apt-get install -y php7.1 php7.1-mysql php7.1-dom php7.1-mcrypt php7.1-mbstring php7.1-zip php7.1-gd php7.1-memcached php7.1-curl php7.1-dev php7.1-intl \
- && sed -i "s/short_open_tag = Off/short_open_tag = On/" /etc/php/7.1/apache/php.ini \
- && sed -i "s/memory_limit = 128M/memory_limit = 512M/" /etc/php/7.1/apache/php.ini \
- && sed -i "s/error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT/error_reporting = E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT/" /etc/php/7.1/apache/php.ini \
- && sed -i "s/display_errors = Off/display_errors=On/" /etc/php/7.1/apache/php.ini \
- && sed -i "s/post_max_size = 8M/post_max_size = 50M/" /etc/php/7.1/apache/php.ini \
- && sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 130M/" /etc/php/7.1/apache/php.ini \
- && sed -i "s/; max_input_vars = 1000/max_input_vars = 1000/" /etc/php/7.1/apache/php.ini
+ && sed -i "s/short_open_tag = Off/short_open_tag = On/" /etc/php/7.1/apache2/php.ini \
+ && sed -i "s/memory_limit = 128M/memory_limit = 512M/" /etc/php/7.1/apache2/php.ini \
+ && sed -i "s/error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT/error_reporting = E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT/" /etc/php/7.1/apache2/php.ini \
+ && sed -i "s/display_errors = Off/display_errors=On/" /etc/php/7.1/apache2/php.ini \
+ && sed -i "s/post_max_size = 8M/post_max_size = 50M/" /etc/php/7.1/apache2/php.ini \
+ && sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 130M/" /etc/php/7.1/apache2/php.ini \
+ && sed -i "s/; max_input_vars = 1000/max_input_vars = 1000/" /etc/php/7.1/apache2/php.ini
 
 #Xdebug
 RUN apt-get install -y php7.1-xdebug \
