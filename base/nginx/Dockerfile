@@ -4,8 +4,8 @@ FROM omatech/base
 RUN apt-get update && apt-get upgrade -y
 
 #Instalación de Nginx
-RUN /bin/echo "deb http://ppa.launchpad.net/nginx/stable/ubuntu trusty main" >> /etc/apt/sources.list.d/nginx.list \
- && /bin/echo "deb-src http://ppa.launchpad.net/nginx/stable/ubuntu trusty main" >> /etc/apt/sources.list.d/nginx.list \
+RUN /bin/echo "deb http://ppa.launchpad.net/nginx/stable/ubuntu xenial main" >> /etc/apt/sources.list.d/nginx.list \
+ && /bin/echo "deb-src http://ppa.launchpad.net/nginx/stable/ubuntu xenial main" >> /etc/apt/sources.list.d/nginx.list \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8B3981E7A6852F782CC4951600A6F0A3C300EE8C \
  && apt-get update \
  && apt-get install -y nginx \
@@ -15,6 +15,22 @@ RUN /bin/echo "deb http://ppa.launchpad.net/nginx/stable/ubuntu trusty main" >> 
 
 EXPOSE 80
 EXPOSE 443
+
+#NodeJS
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+ && apt-get install -y nodejs
+
+#Yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+ && /bin/echo -e "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+ && apt-get update \
+ && apt-get install -y yarn
+
+#Bower, gulp, grunt
+RUN yarn add global bower \
+ && yarn add global gulp \
+ && yarn add global grunt \
+ && /bin/echo '{ "allow_root": true }' > /root/.bowerrc
 
 #Limpiamos temporales
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

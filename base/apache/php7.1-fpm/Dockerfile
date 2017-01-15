@@ -69,6 +69,8 @@ RUN apt-get install -y php7.1-xdebug \
  && /bin/echo 'esac' >> /var/xdebugswitch.sh \
  && chmod a+x /var/xdebugswitch.sh
 
+EXPOSE 9000
+
 #Instalación de Composer
 RUN php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -77,18 +79,21 @@ RUN wget https://phar.phpunit.de/phpunit.phar \
  && chmod +x phpunit.phar \
  && mv phpunit.phar /usr/local/bin/phpunit
 
-EXPOSE 9000
-
 #NodeJS
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
  && apt-get install -y nodejs
 
-#Bower
-RUN  npm install -g bower
-
 #Yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
- && /bin/echo -e "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+ && /bin/echo -e "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+ && apt-get update \
+ && apt-get install -y yarn
+
+#Bower, gulp, grunt
+RUN yarn add global bower \
+ && yarn add global gulp \
+ && yarn add global grunt \
+ && /bin/echo '{ "allow_root": true }' > /root/.bowerrc
 
 #MySQL Client
 RUN /bin/echo "deb http://repo.mysql.com/apt/ubuntu/ xenial mysql-5.7" >> /etc/apt/sources.list.d/mysql.list \
