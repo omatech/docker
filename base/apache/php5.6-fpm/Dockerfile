@@ -57,20 +57,34 @@ RUN /bin/echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" >> /e
 
 #Xdebug
 RUN apt-get install -y php5.6-xdebug \
- && phpdismod xdebug \
+ && phpenmod xdebug \
+ && /bin/echo -e "xdebug.remote_host = 127.0.0.1" >> /etc/php/5.6/fpm/conf.d/20-xdebug.ini \
+ && /bin/echo -e "xdebug.idekey = 'xdebug'" >> /etc/php/5.6/fpm/conf.d/20-xdebug.ini \
+ && /bin/echo -e "xdebug.remote_enable = 1" >> /etc/php/5.6/fpm/conf.d/20-xdebug.ini \
+ && /bin/echo -e "xdebug.remote_connect_back = 0" >> /etc/php/5.6/fpm/conf.d/20-xdebug.ini \
+ && /bin/echo -e "xdebug.remote_port = 9000" >> /etc/php/5.6/fpm/conf.d/20-xdebug.ini \
+ && /bin/echo -e "xdebug.max_nesting_level = 300" >> /etc/php/5.6/fpm/conf.d/20-xdebug.ini \
+ && /bin/echo -e "xdebug.scream = 0" >> /etc/php/5.6/fpm/conf.d/20-xdebug.ini \
+ && /bin/echo -e "xdebug.cli_color = 1" >> /etc/php/5.6/fpm/conf.d/20-xdebug.ini \
+ && /bin/echo -e "xdebug.show_local_vars = 1" >> /etc/php/5.6/fpm/conf.d/20-xdebug.ini \
+ && /bin/echo -e "xdebug.profiler_enable = 1" >> /etc/php/5.6/fpm/conf.d/20-xdebug.ini \
  && /bin/echo '#!/bin/bash' > /var/xdebugswitch.sh \
  && /bin/echo '# Simple script to enable or disable the xdebug extension for php' >> /var/xdebugswitch.sh \
  && /bin/echo 'case $1 in' >> /var/xdebugswitch.sh \
- && /bin/echo 'true|TRUE)' >> /var/xdebugswitch.sh \
+ && /bin/echo 'enabled)' >> /var/xdebugswitch.sh \
  && /bin/echo     'phpenmod xdebug' >> /var/xdebugswitch.sh \
+ && /bin/echo     'sed -i "s/xdebug.idekey = "xdebug"/xdebug.idekey = $2/" /etc/php/5.6/fpm/conf.d/20-xdebug.ini' >> /var/xdebugswitch.sh \
+ && /bin/echo     'sed -i "s/xdebug.remote_host = 127.0.0.1/xdebug.remote_host = $3/" /etc/php/5.6/fpm/conf.d/20-xdebug.ini' >> /var/xdebugswitch.sh \
+ && /bin/echo     'service php5.6-fpm restart' \
  && /bin/echo     'echo "Xdebug is Enabled"' >> /var/xdebugswitch.sh \
  && /bin/echo ';;' >> /var/xdebugswitch.sh \
- && /bin/echo 'false|FALSE)' >> /var/xdebugswitch.sh \
+ && /bin/echo 'disabled)' >> /var/xdebugswitch.sh \
  && /bin/echo     'phpdismod xdebug' >> /var/xdebugswitch.sh \
  && /bin/echo     'echo "Xdebug is Disabled"' >> /var/xdebugswitch.sh \
  && /bin/echo ';;' >> /var/xdebugswitch.sh \
  && /bin/echo 'esac' >> /var/xdebugswitch.sh \
- && chmod a+x /var/xdebugswitch.sh
+ && chmod a+x /var/xdebugswitch.sh \
+ && phpdismod xdebug
 
 EXPOSE 9000
 
