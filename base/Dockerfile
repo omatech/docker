@@ -36,6 +36,12 @@ RUN /bin/echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main" >> 
 #Instalación de Utilidades
 RUN apt-get install -y vim nano curl wget gdebi zsh traceroute zip subversion rsync sendmail-bin sendmail ncftp lynx openssl ca-certificates pdftk imagemagick mailutils htop monit build-essential poppler-utils libimage-exiftool-perl smartmontools iotop software-properties-common
 
+#Instalación de ngrok
+RUN wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip -P /tmp \
+ && unzip /tmp/ngrok-stable-linux-amd64.zip -d /tmp \
+ && chmod +x /tmp/ngrok \
+ && mv /tmp/ngrok /usr/local/bin/ngrok
+
 #Instalación de Oh My Zsh
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
  && sed -i 's/# DISABLE_UNTRACKED_FILES_DIRTY="true"/DISABLE_UNTRACKED_FILES_DIRTY="true"/g' /root/.zshrc \
