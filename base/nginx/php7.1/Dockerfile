@@ -21,7 +21,7 @@ RUN /bin/echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" >> /e
  && /bin/echo "deb-src http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" >> /etc/apt/sources.list.d/php.list \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C \
  && apt-get update \
- && apt-get install -y php7.1-fpm php7.1-mysql php7.1-dom php7.1-mcrypt php7.1-mbstring php7.1-zip php7.1-gd php7.1-memcached php7.1-curl php7.1-dev php7.1-intl \
+ && apt-get install -y php7.1-fpm php7.1-mysql php7.1-dom php7.1-mcrypt php7.1-mbstring php7.1-zip php7.1-gd php7.1-memcached php7.1-curl php7.1-dev php7.1-intl php7.1-soap \
  && apt-get install -y php7.1-xdebug \
  && /bin/echo -e "[program:fpm]\ncommand=/usr/sbin/php-fpm7.1 --nodaemonize\n" >> /etc/supervisor/conf.d/supervisord.conf \
  && mkdir -p /run/php \
@@ -87,9 +87,9 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
  && apt-get install -y yarn
 
 #Bower, gulp, grunt
-RUN yarn add global bower \
- && yarn add global gulp \
- && yarn add global grunt \
+RUN yarn global add bower \
+ && yarn global add gulp \
+ && yarn global add grunt \
  && /bin/echo '{ "allow_root": true }' > /root/.bowerrc
 
 #MySQL Client

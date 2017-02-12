@@ -27,9 +27,9 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
  && apt-get install -y yarn
 
 #Bower, gulp, grunt
-RUN yarn add global bower \
- && yarn add global gulp \
- && yarn add global grunt \
+RUN yarn global add bower \
+ && yarn global add gulp \
+ && yarn global add grunt \
  && /bin/echo '{ "allow_root": true }' > /root/.bowerrc
 
 #Limpiamos temporales
