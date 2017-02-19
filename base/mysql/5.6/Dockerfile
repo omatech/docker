@@ -10,7 +10,7 @@ RUN groupadd mysql --gid 500 \
  && /bin/echo mysql-community-server mysql-community-server/re-root-pass password 'root' | debconf-set-selections \
  && /bin/echo "deb http://repo.mysql.com/apt/ubuntu/ trusty mysql-5.6" >> /etc/apt/sources.list.d/mysql.list \
  && /bin/echo "deb-src http://repo.mysql.com/apt/ubuntu/ trusty mysql-5.6" >> /etc/apt/sources.list.d/mysql.list \
- && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A4A9406876FCBD3C456770C88C718D3B5072E1F5 \
+ && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 5072E1F5 \
  && apt-get remove -y mysql-client mysql-server libmysqlclient-dev mysql-common \
  && /bin/echo 'Package: *' > "/etc/apt/preferences.d/mysql" \
  && /bin/echo 'Pin: origin "repo.mysql.com"' >> "/etc/apt/preferences.d/mysql" \
