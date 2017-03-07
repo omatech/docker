@@ -92,9 +92,9 @@ EXPOSE 9000
 RUN php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/local/bin --filename=composer
 
 #Instalación de PHPUnit
-RUN wget https://phar.phpunit.de/phpunit.phar \
- && chmod +x phpunit.phar \
- && mv phpunit.phar /usr/local/bin/phpunit
+RUN wget https://phar.phpunit.de/phpunit-5.7.phar \
+ && chmod +x phpunit-5.7.phar \
+ && mv phpunit-5.7.phar /usr/local/bin/phpunit
 
 #NodeJS
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
