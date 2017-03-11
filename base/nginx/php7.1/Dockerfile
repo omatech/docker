@@ -48,25 +48,28 @@ RUN apt-get install -y php7.1-xdebug \
  && /bin/echo -e "xdebug.cli_color = 1" >> /etc/php/7.1/fpm/conf.d/20-xdebug.ini \
  && /bin/echo -e "xdebug.show_local_vars = 1" >> /etc/php/7.1/fpm/conf.d/20-xdebug.ini \
  && /bin/echo -e "xdebug.profiler_enable = 1" >> /etc/php/7.1/fpm/conf.d/20-xdebug.ini \
- && /bin/echo '#!/bin/bash' > /var/xdebugswitch.sh \
- && /bin/echo '# Simple script to enable or disable the xdebug extension for php' >> /var/xdebugswitch.sh \
- && /bin/echo 'case $1 in' >> /var/xdebugswitch.sh \
- && /bin/echo 'enabled)' >> /var/xdebugswitch.sh \
- && /bin/echo     'phpenmod xdebug' >> /var/xdebugswitch.sh \
- && /bin/echo     'sed -i "s/xdebug.idekey = "xdebug"/xdebug.idekey = $2/" /etc/php/7.1/fpm/conf.d/20-xdebug.ini' >> /var/xdebugswitch.sh \
- && /bin/echo     'sed -i "s/xdebug.remote_host = 127.0.0.1/xdebug.remote_host = $3/" /etc/php/7.1/fpm/conf.d/20-xdebug.ini' >> /var/xdebugswitch.sh \
+ && /bin/echo '#!/bin/bash' > /var/scripts/xdebugswitch.sh \
+ && /bin/echo '# Simple script to enable or disable the xdebug extension for php' >> /var/scripts/xdebugswitch.sh \
+ && /bin/echo 'case $1 in' >> /var/scripts/xdebugswitch.sh \
+ && /bin/echo 'enabled)' >> /var/scripts/xdebugswitch.sh \
+ && /bin/echo     'phpenmod xdebug' >> /var/scripts/xdebugswitch.sh \
+ && /bin/echo     'sed -i "s/xdebug.idekey = "xdebug"/xdebug.idekey = $2/" /etc/php/7.1/fpm/conf.d/20-xdebug.ini' >> /var/scripts/xdebugswitch.sh \
+ && /bin/echo     'sed -i "s/xdebug.remote_host = 127.0.0.1/xdebug.remote_host = $3/" /etc/php/7.1/fpm/conf.d/20-xdebug.ini' >> /var/scripts/xdebugswitch.sh \
  && /bin/echo     'service php7.1-fpm restart' \
- && /bin/echo     'echo "Xdebug is Enabled"' >> /var/xdebugswitch.sh \
- && /bin/echo ';;' >> /var/xdebugswitch.sh \
- && /bin/echo 'disabled)' >> /var/xdebugswitch.sh \
- && /bin/echo     'phpdismod xdebug' >> /var/xdebugswitch.sh \
- && /bin/echo     'echo "Xdebug is Disabled"' >> /var/xdebugswitch.sh \
- && /bin/echo ';;' >> /var/xdebugswitch.sh \
- && /bin/echo 'esac' >> /var/xdebugswitch.sh \
- && chmod a+x /var/xdebugswitch.sh \
+ && /bin/echo     'echo "Xdebug is Enabled"' >> /var/scripts/xdebugswitch.sh \
+ && /bin/echo ';;' >> /var/scripts/xdebugswitch.sh \
+ && /bin/echo 'disabled)' >> /var/scripts/xdebugswitch.sh \
+ && /bin/echo     'phpdismod xdebug' >> /var/scripts/xdebugswitch.sh \
+ && /bin/echo     'echo "Xdebug is Disabled"' >> /var/scripts/xdebugswitch.sh \
+ && /bin/echo ';;' >> /var/scripts/xdebugswitch.sh \
+ && /bin/echo 'esac' >> /var/scripts/xdebugswitch.sh \
+ && chmod a+x /var/scripts/xdebugswitch.sh \
  && phpdismod xdebug
 
 EXPOSE 9000
+
+#Script para activar/desactivar Xdebug
+RUN /bin/echo -e '[program:switch_xdebug_extension]\nautorestart=false\ncommand=bash -c "/var/scripts/xdebugswitch.sh $XDEBUG_STATUS $XDEBUG_IDEKEY $XDEBUG_REMOTE_HOST && tail -f /dev/null"' >> /etc/supervisor/conf.d/supervisord.conf
 
 #Instalación de Composer
 RUN php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/local/bin --filename=composer

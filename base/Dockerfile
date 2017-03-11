@@ -26,6 +26,12 @@ RUN apt-get install -y openssh-server \
 
 EXPOSE 22
 
+#Script para cambiar el password de root
+RUN mkdir -p /var/scripts \
+ && /bin/echo -e '#!/bin/bash\nif [[ -z "${ROOT_PASSWORD+x}" ]]; then\necho "root:root" | chpasswd\nelse\necho "root:$ROOT_PASSWORD" | chpasswd\nfi\n' > /var/scripts/set_root_password.sh \
+ && chmod a+x /var/scripts/set_root_password.sh \
+ && /bin/echo -e '[program:set_root_password]\nautorestart=false\ncommand=bash -c "/var/scripts/set_root_password.sh && tail -f /dev/null"' >> /etc/supervisor/conf.d/supervisord.conf
+
 #Instalación de Git
 RUN /bin/echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main" >> /etc/apt/sources.list.d/git.list \
  && /bin/echo "deb-src http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main" >> /etc/apt/sources.list.d/git.list \
